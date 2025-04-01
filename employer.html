@@ -1,0 +1,54 @@
+**Step 3: Create `employer.html`**  
+Copy this code **exactly**:  
+```html  
+<!DOCTYPE html>  
+<html>  
+<head>  
+  <title>Post Jobs</title>  
+  <script type="module" src="firebase.js"></script>  
+  <style>  
+    body { font-family: Arial; max-width: 600px; margin: 0 auto; padding: 20px; }  
+    input, textarea { width: 100%; padding: 10px; margin: 8px 0; }  
+    button { background: #28a745; color: white; border: none; padding: 10px; }  
+  </style>  
+</head>  
+<body>  
+  <h1>Post a Job</h1>  
+  <form id="jobForm">  
+    <input type="text" id="jobTitle" placeholder="Job Title" required>  
+    <textarea id="jobDescription" placeholder="Description" required></textarea>  
+    <input type="number" id="jobBudget" placeholder="Budget ($)" required>  
+    <button type="submit">Post Job</button>  
+  </form>  
+
+  <script type="module">  
+    import { db, auth, doc, setDoc } from "./firebase.js";  
+
+    document.getElementById("jobForm").addEventListener("submit", async (e) => {  
+      e.preventDefault();  
+      const jobData = {  
+        title: document.getElementById("jobTitle").value,  
+        description: document.getElementById("jobDescription").value,  
+        budget: document.getElementById("jobBudget").value,  
+        employerId: auth.currentUser.uid,  
+        createdAt: new Date()  
+      };  
+      try {  
+        await setDoc(doc(db, "jobs", Date.now().toString()), jobData);  
+        alert("Job posted!");  
+        window.location.reload();  
+      } catch (error) {  
+        alert("Error: " + error.message);  
+      }  
+    });  
+  </script>  
+</body>  
+</html>  
+```  
+
+**Action:**  
+1. Go to GitHub → Create file `employer.html` → Paste code → Commit.  
+2. Reply **"EMPLOYER DONE"**.  
+
+Next: `jobs.html` and `firebase.js`! 🛠️  
+**Check:** Ensure all quotes `"` are straight (not curly “ ”).
