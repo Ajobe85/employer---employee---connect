@@ -11,13 +11,10 @@
 <body>  
   <h1>Available Jobs</h1>  
   <div id="jobsList"></div>  
-
   <script type="module">  
     import { db, collection, getDocs, auth, doc, setDoc } from "./firebase.js";  
-
     const jobsList = document.getElementById("jobsList");  
     const querySnapshot = await getDocs(collection(db, "jobs"));  
-    
     querySnapshot.forEach((doc) => {  
       const job = doc.data();  
       jobsList.innerHTML += `  
@@ -29,7 +26,6 @@
         </div>  
       `;  
     });  
-
     window.applyToJob = async (jobId) => {  
       try {  
         await setDoc(doc(db, "applications", `${jobId}_${auth.currentUser.uid}`), {  
