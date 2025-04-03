@@ -1,8 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
-
-// REPLACE THIS WITH YOUR FIREBASE CONFIG
 const firebaseConfig = {
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -14,8 +12,6 @@ const firebaseConfig = {
   appId: "1:1008070246651:web:9624e9c0f5d0075fcaf05e",
   measurementId: "G-ZKSRHG72W7"
 };
-};
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
