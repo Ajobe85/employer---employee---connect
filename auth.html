@@ -5,23 +5,19 @@ import {
   doc, 
   setDoc 
 } from "./firebase.js"; // Import from firebase.js
-
 async function signup() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const userType = document.querySelector('input[name="userType"]:checked').value;
-
   try {
     // Create user in Firebase Authentication
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    
     // Save user data to Firestore
     await setDoc(doc(db, "users", userCredential.user.uid), {
       email: email,
       userType: userType,
       createdAt: new Date()
     });
-
     alert("Account created!");
     window.location.href = userType + ".html";
   } catch (error) {
