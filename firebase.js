@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+
 // REPLACE THE VALUES BELOW WITH YOUR FIREBASE CONFIG (from Firebase Console)
 const firebaseConfig = {
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
