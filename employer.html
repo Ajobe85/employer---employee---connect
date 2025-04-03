@@ -17,10 +17,8 @@
     <input type="number" id="jobBudget" placeholder="Budget ($)" required>  
     <button type="submit">Post Job</button>  
   </form>  
-
   <script type="module">  
     import { db, auth, doc, setDoc } from "./firebase.js";  
-
     document.getElementById("jobForm").addEventListener("submit", async (e) => {  
       e.preventDefault();  
       const jobData = {  
