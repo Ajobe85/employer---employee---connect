@@ -1,63 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Sign Up / Login</title>
-  <script type="module" src="firebase.js"></script>
-  <style>
-    body { font-family: Arial; max-width: 400px; margin: 0 auto; padding: 20px; }
-    input, button { width: 100%; padding: 10px; margin: 8px 0; }
-    button { background: #007bff; color: white; border: none; }
-  </style>
-</head>
-<body>
-  <h2>Sign Up</h2>
-  <input type="email" id="email" placeholder="Email">
-  <input type="password" id="password" placeholder="Password">
-  <h3>You are a:</h3>
-  <input type="radio" name="userType" value="employer" checked> Employer<br>
-  <input type="radio" name="userType" value="freelancer"> Freelancer<br>
-  <button onclick="signup()">Sign Up</button>
+// Inside auth.html's <script> section
+import { 
+  auth, 
+  createUserWithEmailAndPassword, 
+  doc, 
+  setDoc 
+} from "./firebase.js"; // Import from firebase.js
 
-  <h2>Login</h2>
-  <input type="email" id="loginEmail" placeholder="Email">
-  <input type="password" id="loginPassword" placeholder="Password">
-  <button onclick="login()">Login</button>
+async function signup() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const userType = document.querySelector('input[name="userType"]:checked').value;
 
-  <script type="module">
-    import { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, db, doc, setDoc, getDoc } from "./firebase.js";
+  try {
+    // Create user in Firebase Authentication
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    
+    // Save user data to Firestore
+    await setDoc(doc(db, "users", userCredential.user.uid), {
+      email: email,
+      userType: userType,
+      createdAt: new Date()
+    });
 
-    async function signup() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const userType = document.querySelector('input[name="userType"]:checked').value;
-
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        await setDoc(doc(db, "users", userCredential.user.uid), {
-          email: email,
-          userType: userType,
-          createdAt: new Date()
-        });
-        alert("Account created!");
-        window.location.href = userType + ".html";
-      } catch (error) {
-        alert("Error: " + error.message);
-      }
-    }
-
-    async function login() {
-      const email = document.getElementById("loginEmail").value;
-      const password = document.getElementById("loginPassword").value;
-
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        const user = auth.currentUser;
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        window.location.href = userDoc.data().userType + ".html";
-      } catch (error) {
-        alert("Error: " + error.message);
-      }
-    }
-  </script>
-</body>
-</html>
+    alert("Account created!");
+    window.location.href = userType + ".html";
+  } catch (error) {
+    alert("Error: " + error.message);
+  }
+}
