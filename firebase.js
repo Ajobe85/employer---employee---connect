@@ -21,16 +21,6 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-hash_config {
-  algorithm: SCRYPT,
-  base64_signer_key: mUI5j2BmiFabZusYnPRnbNeFV5EGn7Co21ClN3pv8UvZ5Vx3jVz4Dwtfm+5FHHFJaC2KfpB8TpAa72UW//HEaQ==,
-  base64_salt_separator: Bw==,
-  rounds: 8,
-  mem_cost: 14,
-}
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const database = firebase.database();
