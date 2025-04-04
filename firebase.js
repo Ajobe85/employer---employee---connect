@@ -10,7 +10,13 @@ const firebaseConfig = {
   appId: "1:1008070246651:web:9624e9c0f5d0075fcaf05e",
   measurementId: "G-ZKSRHG72W7"
 };
-
+hash_config {
+  algorithm: SCRYPT,
+  base64_signer_key: mUI5j2BmiFabZusYnPRnbNeFV5EGn7Co21ClN3pv8UvZ5Vx3jVz4Dwtfm+5FHHFJaC2KfpB8TpAa72UW//HEaQ==,
+  base64_salt_separator: Bw==,
+  rounds: 8,
+  mem_cost: 14,
+}
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
