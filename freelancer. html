@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Freelancer Dashboard</title>
+    <link rel="stylesheet" href="../public/css/styles.css">
+</head>
+<body>
+    <h1>Welcome Freelancer</h1>
+    <!-- Add freelancer-specific content -->
+    <script src="../public/js/firebase.js"></script>
+    <script src="../public/js/app.js"></script>
+</body>
+</html>
