@@ -1,58 +1,144 @@
-
-<!-- auth.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Employer-Employee Connect</title>
-    <!-- Include Firebase SDK -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="firebase.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .signup-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .employer-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .freelancer-btn {
+            background-color: #2ecc71;
+            color: white;
+        }
+
+        #error-message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+    </style>
 </head>
 <body>
-    <h2>Sign Up</h2>
-    <form id="signupForm">
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <button type="button" onclick="signUpAsEmployer()">Sign Up as Employer</button>
-        <button type="button" onclick="signUpAsFreelancer()">Sign Up as Freelancer</button>
-    </form>
-    <div id="error-message" style="color: red;"></div>
+    <div class="signup-container">
+        <h2>Create Your Account</h2>
+        <form id="signupForm" onsubmit="event.preventDefault()">
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Email address" required>
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Create password" required>
+            </div>
+            
+            <div class="btn-group">
+                <button type="button" class="employer-btn" onclick="signUpAsEmployer()">
+                    Employer Sign Up
+                </button>
+                <button type="button" class="freelancer-btn" onclick="signUpAsFreelancer()">
+                    Freelancer Sign Up
+                </button>
+            </div>
+            
+            <div id="error-message"></div>
+        </form>
+    </div>
 
     <script>
+        // Common signup handler
+        async function signUpUser(userType) {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorElement = document.getElementById('error-message');
+
+            try {
+                errorElement.textContent = ''; // Clear previous errors
+                
+                // Create Firebase user
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                
+                // Save user type to database
+                await database.ref('users/' + userCredential.user.uid).set({
+                    email: email,
+                    userType: userType,
+                    createdAt: firebase.database.ServerValue.TIMESTAMP
+                });
+
+                // Redirect to appropriate dashboard
+                window.location.href = `${userType}.html`;
+
+            } catch (error) {
+                errorElement.textContent = error.message;
+                console.error('Signup Error:', error);
+            }
+        }
+
         function signUpAsEmployer() {
             signUpUser('employer');
         }
 
         function signUpAsFreelancer() {
             signUpUser('freelancer');
-        }
-
-        function signUpUser(userType) {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Save user type to database
-                    const user = userCredential.user;
-                    return database.ref('users/' + user.uid).set({
-                        email: email,
-                        userType: userType
-                    });
-                })
-                .then(() => {
-                    // Redirect based on user type
-                    if (userType === 'employer') {
-                        window.location.href = 'employer.html';
-                    } else {
-                        window.location.href = 'freelancer.html';
-                    }
-                })
-                .catch((error) => {
-                    document.getElementById('error-message').innerText = error.message;
-                });
         }
     </script>
 </body>
