@@ -1,9 +1,17 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Refresh" content="0; url='auth.html'" />
+    <script>
+        const path = window.location.pathname;
+        if (path === '/freelancer') {
+            window.location.href = '/freelancer.html';
+        } else {
+            window.location.href = '/auth.html';
+        }
+    </script>
 </head>
 <body>
-    Redirecting to login...
+    Redirecting...
 </body>
 </html>
