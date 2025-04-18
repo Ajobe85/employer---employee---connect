@@ -11,3 +11,63 @@
     <script src="../public/js/app.js"></script>
 </body>
 </html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Freelancer Profile</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="firebase.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Your Professional Profile</h1>
+        
+        <div class="profile-section">
+            <h2>Skills & Experience</h2>
+            <input type="text" id="skills" placeholder="Web Development, Graphic Design...">
+            <textarea id="experience" placeholder="Work experience"></textarea>
+            <button onclick="saveProfile()">Save Profile</button>
+        </div>
+
+        <div class="jobs-section">
+            <h2>Available Jobs</h2>
+            <div id="job-listings"></div>
+        </div>
+    </div>
+
+    <script>
+        // Save profile to Firebase
+        async function saveProfile() {
+            const user = firebase.auth().currentUser;
+            const profile = {
+                skills: document.getElementById('skills').value.split(','),
+                experience: document.getElementById('experience').value,
+                lastUpdated: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            try {
+                await firebase.database().ref('freelancers/' + user.uid).set(profile);
+                alert('Profile saved!');
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Load jobs (we'll enhance this later)
+        firebase.database().ref('jobs').on('value', (snapshot) => {
+            const jobs = snapshot.val();
+            const listingsDiv = document.getElementById('job-listings');
+            listingsDiv.innerHTML = '';
+            
+            for (const key in jobs) {
+                listingsDiv.innerHTML += `
+                    <div class="job-card">
+                        <h3>${jobs[key].title}</h3>
+                        <p>${jobs[key].description}</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
