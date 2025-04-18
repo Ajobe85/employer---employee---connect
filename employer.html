@@ -39,4 +39,64 @@
   </script>  
 </body>  
 </html>  
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employer Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="firebase.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <h1>Welcome Employer</h1>
+        
+        <!-- Navigation -->
+        <div class="nav">
+            <button onclick="showSection('post-job')">Post Job</button>
+            <button onclick="showSection('view-freelancers')">Find Talent</button>
+        </div>
 
+        <!-- Job Posting Section -->
+        <div id="post-job" class="section">
+            <h2>Post New Job</h2>
+            <input type="text" id="job-title" placeholder="Job Title">
+            <textarea id="job-description" placeholder="Description"></textarea>
+            <button onclick="postJob()">Publish Job</button>
+        </div>
+
+        <!-- Freelancer List -->
+        <div id="view-freelancers" class="section" style="display:none;">
+            <h2>Available Freelancers</h2>
+            <div id="freelancer-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Show/hide sections
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(div => {
+                div.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        // Post job to Firebase
+        async function postJob() {
+            const user = firebase.auth().currentUser;
+            const job = {
+                title: document.getElementById('job-title').value,
+                description: document.getElementById('job-description').value,
+                postedBy: user.uid,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            try {
+                await firebase.database().ref('jobs').push(job);
+                alert('Job posted successfully!');
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
