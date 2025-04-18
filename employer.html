@@ -101,3 +101,20 @@
     </script>
 </body>
 </html>
+<script>
+    function showSection(sectionId) {
+        // Hide all sections
+        document.querySelectorAll('.job-form, .job-list').forEach(el => {
+            el.style.display = 'none';
+        });
+        
+        // Show selected section
+        document.getElementById(sectionId).style.display = 'block';
+        
+        // Update tab styles
+        document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+    }
+</script>
