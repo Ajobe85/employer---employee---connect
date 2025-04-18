@@ -1,47 +1,74 @@
-body {
-    font-family: 'Arial', sans-serif;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background: #f5f7fa;
-}
-
-.dashboard {
-    background: white;
-    padding: 30px;
+/* Enhanced Styling */
+.employer-dashboard {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.nav button {
+.job-form {
+    margin-top: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.btn-primary {
     background: #2563eb;
     color: white;
+    padding: 0.75rem 1.5rem;
     border: none;
-    padding: 12px 24px;
-    margin-right: 10px;
     border-radius: 6px;
     cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
 }
 
-.section {
-    margin-top: 30px;
-    padding: 20px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+.btn-primary:hover {
+    background: #1d4ed8;
 }
 
-input, textarea {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #e5e7eb;
+.nav-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: 0.75rem 1.5rem;
     border-radius: 6px;
-    box-sizing: border-box;
+    cursor: pointer;
+    font-weight: 600;
+    color: #6b7280;
 }
 
-.job-card, #freelancer-list div {
-    background: #f8fafc;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 8px;
+.tab-button.active {
+    background: #eff6ff;
+    color: #2563eb;
 }
