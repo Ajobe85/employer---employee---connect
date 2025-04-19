@@ -3,27 +3,36 @@
 <head>
     <title>Freelancer Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="firebase.js"></script>
 </head>
 <body>
-    <div class="dashboard">
-        <h1>Welcome Freelancer</h1>
-        <div class="job-listings" id="jobListings">
-            <!-- Jobs will load here -->
+    <div class="dashboard-container">
+        <header>
+            <h1>Welcome Freelancer</h1>
+            <button onclick="logout()" class="logout-btn">Log Out</button>
+        </header>
+        
+        <div class="jobs-section">
+            <h2>Available Job Opportunities</h2>
+            <div id="jobs-list" class="jobs-list"></div>
         </div>
     </div>
 
     <script>
-        // Initialize Firebase
+        // Initialize Firebase services
         const auth = firebase.auth();
         const database = firebase.database();
 
-        // Check authentication state
+        // Authentication state listener
         auth.onAuthStateChanged(user => {
             if (!user) {
                 window.location.href = 'auth.html';
             } else {
                 loadJobs();
+                checkApplications(user.uid);
             }
         });
 
@@ -31,32 +40,34 @@
         function loadJobs() {
             database.ref('jobs').on('value', snapshot => {
                 const jobs = snapshot.val();
-                const container = document.getElementById('jobListings');
+                const container = document.getElementById('jobs-list');
                 container.innerHTML = '';
 
                 if (!jobs) {
-                    container.innerHTML = '<p>No available jobs at the moment. Check back later!</p>';
+                    container.innerHTML = '<p class="no-jobs">No available jobs currently. Please check back later!</p>';
                     return;
                 }
 
-                Object.keys(jobs).forEach(jobId => {
-                    const job = jobs[jobId];
-                    container.innerHTML += `
-                        <div class="job-card">
+                Object.entries(jobs).forEach(([jobId, job]) => {
+                    const jobCard = `
+                        <div class="job-card" data-jobid="${jobId}">
                             <h3>${job.title}</h3>
-                            <p>${job.description}</p>
-                            <p>Posted: ${new Date(job.timestamp).toLocaleDateString()}</p>
-                            <button onclick="applyForJob('${jobId}')">Apply Now</button>
+                            <p class="job-description">${job.description}</p>
+                            <div class="job-meta">
+                                <span class="post-date">Posted: ${new Date(job.timestamp).toLocaleDateString()}</span>
+                                <button onclick="applyForJob('${jobId}')" class="apply-btn">Apply Now</button>
+                            </div>
                         </div>
                     `;
+                    container.innerHTML += jobCard;
                 });
             });
         }
 
-        // Apply for job functionality
+        // Job application functionality
         async function applyForJob(jobId) {
+            const user = auth.currentUser;
             try {
-                const user = auth.currentUser;
                 await database.ref(`applications/${jobId}`).push({
                     freelancerId: user.uid,
                     appliedAt: Date.now(),
@@ -66,6 +77,13 @@
             } catch (error) {
                 alert('Error submitting application: ' + error.message);
             }
+        }
+
+        // Logout functionality
+        function logout() {
+            auth.signOut().then(() => {
+                window.location.href = 'auth.html';
+            });
         }
     </script>
 </body>
